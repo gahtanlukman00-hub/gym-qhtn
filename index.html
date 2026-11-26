@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gym Log</title>
+<meta name="theme-color" content="#2f5d8a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gym Log">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{color-scheme:light;--bg:#eef1f4;--card:#fff;--ink:#1b2733;--mute:#5d6b79;--line:#d3dae2;--acc:#2f5d8a;--accink:#fff;--ok:#2e7d4f;--okbg:#e3f3ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#10161c;--card:#19212a;--ink:#e8edf2;--mute:#9aa8b5;--line:#2b3744;--acc:#6aa3d8;--accink:#0d1721;--ok:#5cc08a;--okbg:#173023}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10161c;--card:#19212a;--ink:#e8edf2;--mute:#9aa8b5;--line:#2b3744;--acc:#6aa3d8;--accink:#0d1721;--ok:#5cc08a;--okbg:#173023}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+main{max-width:560px;margin:0 auto;padding:0 14px 90px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:10px 0;background:var(--bg)}
+nav button{font:600 14px system-ui,sans-serif;padding:10px 2px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px}
+nav button[aria-pressed="true"]{background:var(--acc);color:var(--accink);border-color:var(--acc)}
+h1,h2{font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;margin:0;font-weight:800}
+h1{font-size:30px}
+h2{font-size:20px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:6px 0 12px}
+input[type=date]{font:500 15px system-ui,sans-serif;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.ex{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 12px 8px;margin-bottom:10px}
+.eh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tg{font-weight:600;color:var(--mute);white-space:nowrap}
+.lt{margin:2px 0 8px;color:var(--mute);font-size:14px}
+.up{margin:0 0 8px;padding:6px 10px;border-radius:8px;background:var(--okbg);color:var(--ok);font-weight:600;font-size:14px}
+.st{display:grid;grid-template-columns:46px 1fr 1fr;gap:8px;align-items:center;margin-bottom:6px}
+.st span{color:var(--mute);font-size:14px}
+.st label,.bx{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:0 10px;background:var(--bg)}
+.st input,.bx input{width:100%;min-width:0;border:0;background:transparent;color:var(--ink);font:600 20px system-ui,sans-serif;padding:9px 0;outline:none}
+.bx input[type=text]{font-size:16px;font-weight:500}
+.st label:focus-within,.bx:focus-within{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc)}
+.st b,.bx b{font-weight:500;color:var(--mute);font-size:14px}
+.fld{display:block;margin-bottom:10px}
+.fld>span{display:block;color:var(--mute);font-size:14px;margin-bottom:4px}
+.pc{margin:0 0 10px;font-size:15px;color:var(--mute)}
+.pc strong{color:var(--ink);font-size:22px}
+.save,.btn{width:100%;margin-top:6px;padding:15px;border:0;border-radius:12px;background:var(--acc);color:var(--accink);font:700 18px system-ui,sans-serif}
+.save{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.sum{margin:14px 0 8px;padding:10px 12px;border-radius:10px;background:var(--okbg);color:var(--ok);font-weight:600}
+details,.run{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+summary{font-weight:600;cursor:pointer}
+details p,.run p{margin:6px 0 0;font-size:14px}
+details p em{font-style:normal;font-weight:600}
+.run b{font-size:16px}
+.del,.ghost{margin-top:10px;margin-right:8px;font:600 14px system-ui,sans-serif;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--mute)}
+.empty{color:var(--mute);padding:20px 4px}
+textarea{width:100%;min-height:120px;box-sizing:border-box;margin-top:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:13px ui-monospace,Menlo,monospace;padding:8px}
+#toast{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+#toast.on{opacity:1}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main>
+<nav id="nav"></nav>
+<div id="view"></div>
+</main>
+<div id="toast" role="status"></div>
+<script>
+const P={
+A:{t:'Senin',n:'Upper A',e:[['Chest Press Machine',3,8,12],['Lat Pulldown',3,8,12],['Shoulder Press Machine',3,8,12],['Lateral Raise',4,12,15],['Seated Cable Row',3,10,12],['Biceps Curl Machine',3,10,12],['Triceps Pushdown',3,10,12],['Wrist Curl',2,12,15]]},
+B:{t:'Rabu',n:'Kaki + bahu + lengan',e:[['Leg Press',3,10,12],['Seated Leg Curl',3,10,12],['Leg Extension',2,12,15],['Calf Raise',3,12,15],['Lateral Raise',3,12,15],['Reverse Pec Deck',3,12,15],['Hammer Curl',3,10,12],['Triceps Extension Machine',3,10,12],['Ab Crunch Machine',2,12,15]]},
+C:{t:'Jumat',n:'Upper B',e:[['Lat Pulldown',3,10,12],['Shoulder Press (dumbbell/mesin)',3,8,12],['Lateral Raise',4,12,15],['Chest Press Machine',2,10,12],['Seated Cable Row',2,10,12],['Biceps Curl (dumbbell/cable)',3,10,12],['Overhead Triceps Extension',3,10,12],['Reverse Curl',2,12,15],['Farmer’s Walk',3,30,40,'detik']]}
+};
+const K='gymlog_v1';
+let S={sessions:[],runs:[],draft:{},rdraft:{}},tab='A',cf=null,bk=false;
+try{const r=localStorage.getItem(K);if(r){const o=JSON.parse(r);if(o&&o.sessions)S=Object.assign(S,o)}}catch(e){}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fd=d=>new Date(d+'T12:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+const wd=d=>d?new Date(d+'T12:00:00').toLocaleDateString('id-ID',{weekday:'long'}):'';
+const kmf=k=>String(Math.round(k*100)/100).replace('.',',');
+const pace=(km,sec)=>{if(!(km>0&&sec>0))return '';const p=Math.round(sec/km);return Math.floor(p/60)+':'+pad(p%60)};
+const dur=sec=>{const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return h?h+':'+pad(m)+':'+pad(s):m+':'+pad(s)};
+const wk=d=>{const x=new Date(d+'T12:00:00');x.setDate(x.getDate()-((x.getDay()+6)%7));return x.toISOString().slice(0,10)};
+const dd=()=>S.draft[tab]||(S.draft[tab]={});
+const rd=()=>S.rdraft||(S.rdraft={});
+function sortAll(){S.sessions.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);S.runs.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id)}
+function last(n){for(const s of S.sessions){const x=s.log[n];if(x&&x.length)return{d:s.date,sets:x}}return null}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('on'),2200)}
+function nav(){document.getElementById('nav').innerHTML=['A','B','C'].map(k=>`<button data-act="tab" data-k="${k}" aria-pressed="${tab===k}">${P[k].t}</button>`).join('')+`<button data-act="tab" data-k="R" aria-pressed="${tab==='R'}">Lari</button><button data-act="tab" data-k="H" aria-pressed="${tab==='H'}">Riwayat</button>`}
+function day(){
+const p=P[tab],d=S.draft[tab]||{};
+let h=`<div class="top"><h1>${p.n}</h1><input id="dt" type="date" value="${esc(d.date||today())}" aria-label="Tanggal latihan"></div>`;
+p.e.forEach(e=>{
+const [n,ns,lo,hi,u]=e,L=last(n),dr=(d.x&&d.x[n])||[];
+const up=L&&L.sets.length>=ns&&L.sets.every(s=>s.r>=hi);
+h+=`<section class="ex"><div class="eh"><h2>${esc(n)}</h2><span class="tg">${ns} × ${lo}-${hi}${u?' '+u:''}</span></div>`;
+h+=L?`<p class="lt">Terakhir (${fd(L.d)}): ${L.sets.map(s=>s.k+' kg × '+s.r).join(', ')}</p>`:`<p class="lt">Belum ada catatan.</p>`;
+if(up)h+=`<p class="up">Semua set sudah mencapai ${hi}. Coba naikkan beban hari ini.</p>`;
+for(let s=0;s<ns;s++){
+const v=dr[s]||{},ph=L?(L.sets[s]||L.sets[L.sets.length-1]).k:'';
+h+=`<div class="st"><span>Set ${s+1}</span><label><input type="number" inputmode="decimal" step="0.5" min="0" data-n="${esc(n)}" data-s="${s}" data-f="k" value="${v.k??''}" placeholder="${ph}" aria-label="Beban set ${s+1}"><b>kg</b></label><label><input type="number" inputmode="numeric" min="0" data-n="${esc(n)}" data-s="${s}" data-f="r" value="${v.r??''}" placeholder="${lo}" aria-label="Jumlah set ${s+1}"><b>${u||'rep'}</b></label></div>`}
+h+=`</section>`});
+return h+`<button class="save" data-act="commit">Simpan latihan</button>`}
+function runs(){
+const r=rd(),dt=r.date||today();
+let h=`<div class="top"><h1>Lari</h1><input id="rdt" type="date" value="${esc(dt)}" aria-label="Tanggal lari"></div>`;
+h+=`<section class="ex"><p class="lt" id="rday">${esc(wd(dt))}</p>`;
+h+=`<label class="fld"><span>Jarak</span><div class="bx"><input id="rk" type="number" inputmode="decimal" step="0.01" min="0" value="${r.k??''}" placeholder="3"><b>km</b></div></label>`;
+h+=`<div class="fld"><span>Durasi</span><div class="bx"><input id="rm" type="number" inputmode="numeric" min="0" value="${r.m??''}" placeholder="20" aria-label="Menit"><b>menit</b><input id="rs" type="number" inputmode="numeric" min="0" max="59" value="${r.s??''}" placeholder="0" aria-label="Detik"><b>detik</b></div></div>`;
+h+=`<p class="pc">Pace: <strong id="pc">${pace(+r.k,(+r.m||0)*60+(+r.s||0))||'-'}</strong> menit/km</p>`;
+h+=`<label class="fld"><span>Catatan</span><div class="bx"><input id="rn" type="text" value="${esc(r.n||'')}" placeholder="Rute, cuaca, kondisi badan"></div></label></section>`;
+h+=`<button class="btn" data-act="runsave">Simpan lari</button>`;
+const w=wk(today()),tw=S.runs.filter(x=>wk(x.date)===w),km=tw.reduce((a,x)=>a+x.km,0),sec=tw.reduce((a,x)=>a+x.sec,0);
+h+=tw.length?`<p class="sum">Minggu ini: ${kmf(km)} km dari ${tw.length} kali lari, pace rata-rata ${pace(km,sec)}/km</p>`:`<p class="lt" style="margin-top:14px">Belum ada lari minggu ini.</p>`;
+S.runs.forEach(x=>{
+h+=`<div class="run"><b>${esc(wd(x.date))}, ${fd(x.date)}</b><p>${kmf(x.km)} km, ${dur(x.sec)}, pace ${pace(x.km,x.sec)}/km</p>${x.note?`<p>${esc(x.note)}</p>`:''}<button class="del" data-act="rdel" data-id="${x.id}">${cf===x.id?'Yakin hapus lari ini?':'Hapus'}</button></div>`});
+return h}
+function hist(){
+let h=`<h1>Riwayat</h1>`;
+if(!S.sessions.length)h+=`<p class="empty">Belum ada latihan beban tersimpan. Isi beban dan repetisi di salah satu hari, lalu tekan Simpan latihan.</p>`;
+else h+=`<p class="lt">${S.sessions.length} sesi latihan beban tersimpan di HP ini.</p>`;
+S.sessions.forEach(s=>{
+const p=P[s.day]||{t:'',n:''};
+h+=`<details><summary>${fd(s.date)}, ${esc(p.t)} (${esc(p.n)})</summary>`;
+for(const n in s.log)h+=`<p><em>${esc(n)}:</em> ${s.log[n].map(x=>x.k+' kg × '+x.r).join(', ')}</p>`;
+h+=`<button class="del" data-act="del" data-id="${s.id}">${cf===s.id?'Yakin hapus sesi ini?':'Hapus sesi'}</button></details>`});
+h+=`<button class="ghost" data-act="bk">Cadangkan / pulihkan data</button>`;
+if(bk)h+=`<textarea id="bkt">${esc(JSON.stringify({sessions:S.sessions,runs:S.runs}))}</textarea><p class="lt">Salin teks ini untuk cadangan. Untuk memulihkan, tempel teks cadangan di kotak ini (bisa dari versi lama), lalu tekan Pulihkan.</p><button class="ghost" data-act="restore">Pulihkan</button>`;
+return h}
+function render(){nav();document.getElementById('view').innerHTML=tab==='H'?hist():tab==='R'?runs():day()}
+function commit(){
+const d=S.draft[tab]||{},log={};
+P[tab].e.forEach(e=>{const a=(d.x&&d.x[e[0]])||[];const sets=a.filter(s=>s&&s.r!==''&&s.r!=null).map(s=>({k:+s.k||0,r:+s.r}));if(sets.length)log[e[0]]=sets});
+if(!Object.keys(log).length)return toast('Isi minimal satu set dulu');
+S.sessions.unshift({id:Date.now(),date:d.date||today(),day:tab,log});
+sortAll();delete S.draft[tab];save();render();window.scrollTo(0,0);toast('Latihan disimpan')}
+function runsave(){
+const r=rd(),km=+r.k,sec=(+r.m||0)*60+(+r.s||0);
+if(!(km>0&&sec>0))return toast('Isi jarak dan durasi dulu');
+S.runs.unshift({id:Date.now(),date:r.date||today(),km,sec,note:(r.n||'').trim()});
+sortAll();S.rdraft={};save();render();toast('Lari disimpan')}
+function restore(){
+try{
+const o=JSON.parse(document.getElementById('bkt').value),ss=Array.isArray(o)?o:(o.sessions||[]),rr=o.runs||[];let n=0;
+ss.forEach(s=>{if(s&&s.log&&s.date&&!S.sessions.some(x=>x.id===s.id)){S.sessions.push(s);n++}});
+rr.forEach(s=>{if(s&&s.km&&s.date&&!S.runs.some(x=>x.id===s.id)){S.runs.push(s);n++}});
+sortAll();save();render();toast(n+' catatan dipulihkan')
+}catch(e){toast('Teks cadangan tidak valid')}}
+document.addEventListener('input',e=>{
+const t=e.target,id=t.id;
+if(id==='dt'){dd().date=t.value;save();return}
+if(id&&id[0]==='r'&&id.length<=3){
+const r=rd(),f={rdt:'date',rk:'k',rm:'m',rs:'s',rn:'n'}[id];
+if(f){r[f]=t.value;save();
+if(id==='rdt')document.getElementById('rday').textContent=wd(t.value);
+else{const p=pace(+r.k,(+r.m||0)*60+(+r.s||0));const el=document.getElementById('pc');if(el)el.textContent=p||'-'}}
+return}
+if(t.dataset&&t.dataset.n){const D=dd(),x=D.x||(D.x={}),a=x[t.dataset.n]||(x[t.dataset.n]=[]),s=+t.dataset.s;(a[s]||(a[s]={}))[t.dataset.f]=t.value;save()}});
+document.addEventListener('click',e=>{
+const b=e.target.closest('[data-act]');if(!b)return;
+const a=b.dataset.act;
+if(a==='tab'){tab=b.dataset.k;cf=null;bk=false;render();window.scrollTo(0,0)}
+else if(a==='commit')commit();
+else if(a==='runsave')runsave();
+else if(a==='del'){const id=+b.dataset.id;if(cf===id){S.sessions=S.sessions.filter(s=>s.id!==id);cf=null;save();toast('Sesi dihapus')}else cf=id;render()}
+else if(a==='rdel'){const id=+b.dataset.id;if(cf===id){S.runs=S.runs.filter(s=>s.id!==id);cf=null;save();toast('Lari dihapus')}else cf=id;render()}
+else if(a==='bk'){bk=!bk;render()}
+else if(a==='restore')restore()});
+render();
+if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
